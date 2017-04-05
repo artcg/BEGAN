@@ -22,6 +22,8 @@ The final contribution of the paper is a derived convergence measure M which giv
 
 The overall result is a surprisingly effective model which produces samples well beyond the previous state of the art. We (the author of this code) are looking forwarding to  seeing how BEGAN performs outside of faces!
 
+![test](../master/readme/generated_from_Z.png)  
+*128x128 samples generated from random points in Z, from [(Berthelot, Schumm and Metz, 2017)](#references).*
 ## Usage 
 
 Download the dataset (include script)

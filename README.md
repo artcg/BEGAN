@@ -12,7 +12,7 @@ This is an implementation of the paper on Boundary Equilibrium Generative Advers
 
 ## What are Boundary Equilibrium Generative Adversarial Networks?
 
-Unlike standard generative adversarial networks (Goodfellow et al. 2014), boundary equilibrium generative adversarial networks (BEGAN) ...
+Unlike standard generative adversarial networks [(Goodfellow et al. 2014)](#references), boundary equilibrium generative adversarial networks (BEGAN) ...
 
 ## Usage 
 

@@ -9,6 +9,8 @@ This is an implementation of the paper on Boundary Equilibrium Generative Advers
 * Tensorflow
 * Prettytensor
 * tqdm 
+* h5py
+* scipy (optional)
 
 ## What are Boundary Equilibrium Generative Adversarial Networks?
 

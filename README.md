@@ -110,8 +110,6 @@ dataset_path = '/home/user/data/dataset.hdf5'
 checkpoint_path = './checkpoints'
 ```
 
-Feel free to tune the other parameters in config.py if you wish. The default values are the same as in the paper (though the authors point out that their choices aren't necessarily optimal!).
-
 You can then begin training:
 
 ```bash
@@ -128,6 +126,9 @@ I have 12GB which works for around 60,000 images.
 
 You can specify GPU id with the ```--gpuid``` argument. If you want to run on CPU (not recommended!) use ```--gpuid -1```
 
+Feel free to tune the other parameters if you wish (run ```python main.py --help``` for the full list).
+The default values are the same as in the paper (though the authors point out that their choices aren't necessarily optimal!).
+
 The one difference between this implementation's defaults and the original paper is the use of batch normalisation - feel free to disable this if you wish with ```--use-batch-norm 0```, but we found that this made training much slower.
 
 ### Running
@@ -142,7 +143,9 @@ Samples will be saved to ./outputs/ by default (or add optional argument ```--ou
 ### Tracking Progress
 
 As discussed previously, the convergence measure gives a very nice way of tracking progress!
-This is implemented into the code (via the dictionary ```loss_tracker```) so feel free to save this if you wish. Berthelot, Schumm and Metz show that is a true-to-reality metric to use:
+This is implemented into the code (via the dictionary ```loss_tracker```)
+
+Berthelot, Schumm and Metz show that is a true-to-reality metric to use:
 
 <p align='center'>
 <img src='../master/readme/conv_measure_vis.png' width=550>

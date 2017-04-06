@@ -128,6 +128,8 @@ I have 12GB which works for around 60,000 images.
 
 You can specify GPU id with the ```--gpuid``` argument. If you want to run on CPU (not recommended!) use ```--gpuid -1```
 
+The one difference between this implementation's defaults and the original paper is the use of batch normalisation - feel free to disable this if you wish with ```--use-batch-norm 0```, but we found that this made training much slower.
+
 ### Tracking Progress
 
 As discussed previously, the convergence measure gives a very nice way of tracking progress!

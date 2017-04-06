@@ -131,7 +131,7 @@ As discussed previously, the convergence measure gives a very nice way of tracki
 This is implemented into the code (via the dictionary ```loss_tracker```) so feel free to save this if you wish. Berthelot, Schumm and Metz show that is a true-to-reality metric to use:
 
 <p align='center'>
-<img src='../master/readme/conv_measure_vis.png width=550'>
+<img src='../master/readme/conv_measure_vis.png' width=550>
 </p>
 
 *Convergence measure over training epochs, with generator outputs showed above [(Berthelot, Schumm and Metz, 2017)](#references).*

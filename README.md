@@ -17,13 +17,13 @@ This is an implementation of the paper on Boundary Equilibrium Generative Advers
 Unlike standard generative adversarial networks [(Goodfellow et al. 2014)](#references), boundary equilibrium generative adversarial networks (BEGAN) use an auto-encoder as a disciminator. An auto-encoder loss is proposed, and an approximation of the Wasserstein distance is then computed between the auto-encoder loss distributions of real and generated samples.
 
 <p align='center'>
-<img src='../master/readme/eq_autoencoder_loss.png'>  
+<img src='../master/readme/eq_autoencoder_loss.png' width=580>  
 </p>
 
 Effectively, this Wasserstein approximation simplifies to a loss function wherein the discriminating auto-encoder aims to perform *well on real samples* and *poorly on generated samples*, while the generator aims to produce adversarial samples which the discriminator can't help but perform well upon.
 
 <p align='center'>
-<img src='../master/readme/eq_losses.png'>
+<img src='../master/readme/eq_losses.png' width=480>
 </p>
 
 
@@ -53,8 +53,9 @@ The final contribution of the paper is a derived convergence measure M which giv
 
 The overall result is a surprisingly effective model which produces samples well beyond the previous state of the art. We (the author of this code) are looking forwarding to  seeing how BEGAN performs outside of faces!
 <p align='center'>
-<img src='../master/readme/generated_from_Z.png'>
+<img src='../master/readme/generated_from_Z.png' width=550>
 </p>
+
 *128x128 samples generated from random points in Z, from [(Berthelot, Schumm and Metz, 2017)](#references).*
 
 ## Usage 
@@ -130,9 +131,10 @@ As discussed previously, the convergence measure gives a very nice way of tracki
 This is implemented into the code (via the dictionary ```loss_tracker```) so feel free to save this if you wish. Berthelot, Schumm and Metz show that is a true-to-reality metric to use:
 
 <p align='center'>
-<img src='../master/readme/conv_measure_vis.png'>
+<img src='../master/readme/conv_measure_vis.png width=550'>
 </p>
-*M over training epochs, with generator outputs showed above [(Berthelot, Schumm and Metz, 2017)](#references).*
+
+*Convergence measure over training epochs, with generator outputs showed above [(Berthelot, Schumm and Metz, 2017)](#references).*
 
 
 ## Issues / Contributing / Todo

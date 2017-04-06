@@ -68,6 +68,7 @@ This then needs to be prepared into hdf5 through the following method:
 
 ```python
 from glob import glob 
+import os
 import numpy as np
 import h5py
 from tqdm import tqdm
@@ -82,7 +83,7 @@ data = np.zeros((len(filenames), w * h * 3), dtype = np.uint8)
 # (or removed entirely) for other datasets.
 
 def get_image(image_path, w=64, h=64):
-    im = imread(path).astype(np.float)
+    im = imread(image_path).astype(np.float)
     orig_h, orig_w = im.shape[:2]
     new_h = int(orig_h * w / orig_w)
     im = imresize(im, (new_h, w))

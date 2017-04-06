@@ -129,7 +129,7 @@ You can specify GPU id with the ```--gpuid``` argument. If you want to run on CP
 Feel free to tune the other parameters if you wish (run ```python main.py --help``` for the full list).
 The default values are the same as in the paper (though the authors point out that their choices aren't necessarily optimal).
 
-The one difference between this implementation's defaults and the original paper is the use of batch normalisation, we found that not using batch normalisation made training much slower.
+The main difference between this implementation's defaults and the original paper is the use of batch normalisation, we found that not using batch normalisation made training much slower.
 
 ### Running
 

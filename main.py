@@ -153,7 +153,7 @@ def began_train(images, start_epoch=0, add_epochs=None, batch_size=16,
             _, _, D_loss_, G_loss_, k_t_ = \
                 sess.run([G_train, D_train, D_loss, G_loss, k_tp],
                          {learning_rate: learning_rate_,
-                          next_batch: next_batch_, k_t: k_t_})
+                          next_batch: next_batch_, k_t: min(max(k_t_, 0), 1)})
 
             loss_tracker['generator'].append(G_loss_)
             loss_tracker['discriminator'].append(D_loss_)

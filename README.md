@@ -14,7 +14,7 @@ This is an implementation of the paper on Boundary Equilibrium Generative Advers
 
 ## What are Boundary Equilibrium Generative Adversarial Networks?
 
-Unlike standard generative adversarial networks [(Goodfellow et al. 2014)](#references), boundary equilibrium generative adversarial networks (BEGAN) use an auto-encoder as a disciminator. An auto-encoder loss is proposed, and an approximation of the Wasserstein distance is then computed between the pixelwise auto-encoder loss distributions of real and generated samples.
+Unlike standard generative adversarial networks [(Goodfellow et al. 2014)](#references), boundary equilibrium generative adversarial networks (BEGAN) use an auto-encoder as a disciminator. An auto-encoder loss is defined, and an approximation of the Wasserstein distance is then computed between the pixelwise auto-encoder loss distributions of real and generated samples.
 
 <p align='center'>
 <img src='../master/readme/eq_autoencoder_loss.png' width=580>  
@@ -27,7 +27,7 @@ With the auto-encoder loss defined (above), the Wasserstein distance approximati
 </p>
 
 
-Additionally, a hyperparamater gamma is introduced which gives the used the power to control sample diversity by balancing the discriminator and generator.
+Additionally, a hyper-parameter gamma is introduced which gives the user the power to control sample diversity by balancing the discriminator and generator.
 
 <p align='center'>
 <img src='../master/readme/eq_gamma.png' width=170>  
@@ -129,7 +129,7 @@ You can specify GPU id with the ```--gpuid``` argument. If you want to run on CP
 Feel free to tune the other parameters if you wish (run ```python main.py --help``` for the full list).
 The default values are the same as in the paper (though the authors point out that their choices aren't necessarily optimal!).
 
-The one difference between this implementation's defaults and the original paper is the use of batch normalisation - feel free to disable this if you wish with ```--use-batch-norm 0```, but we found that this made training much slower.
+The one difference between this implementation's defaults and the original paper is the use of batch normalisation, we found that not using batch normalisation made training much slower.
 
 ### Running
 
@@ -143,9 +143,9 @@ Samples will be saved to ./outputs/ by default (or add optional argument ```--ou
 ### Tracking Progress
 
 As discussed previously, the convergence measure gives a very nice way of tracking progress!
-This is implemented into the code (via the dictionary ```loss_tracker```)
+This is implemented into the code (via the dictionary ```loss_tracker``` with key ```convergence_measure```)
 
-Berthelot, Schumm and Metz show that is a true-to-reality metric to use:
+Berthelot, Schumm and Metz show that it is a true-to-reality metric to use:
 
 <p align='center'>
 <img src='../master/readme/conv_measure_vis.png' width=550>

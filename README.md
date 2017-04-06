@@ -26,7 +26,6 @@ With the auto-encoder loss defined (above), the Wasserstein distance approximati
 <img src='../master/readme/eq_losses.png' width=380>
 </p>
 
-
 Additionally, a hyper-parameter gamma is introduced which gives the user the power to control sample diversity by balancing the discriminator and generator.
 
 <p align='center'>

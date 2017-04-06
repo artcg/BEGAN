@@ -130,6 +130,15 @@ You can specify GPU id with the ```--gpuid``` argument. If you want to run on CP
 
 The one difference between this implementation's defaults and the original paper is the use of batch normalisation - feel free to disable this if you wish with ```--use-batch-norm 0```, but we found that this made training much slower.
 
+### Running
+
+After you've trained a model and you want to generate some samples simply run
+```bash
+python main.py --start-epoch=N, add-epochs=0, --train=False
+```
+where N is the checkpoint you want to run from.
+Samples will be saved to ./outputs/ by default (or add optional argument ```--outdir``` for alternative).
+
 ### Tracking Progress
 
 As discussed previously, the convergence measure gives a very nice way of tracking progress!

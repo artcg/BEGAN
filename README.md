@@ -126,6 +126,8 @@ python main.py --start-epoch=0, add-epochs=100 --save-every 5 --max-images 20000
 
 I have 12GB which works for around 60,000 images.
 
+You can specify GPU id with the ```--gpuid``` argument. If you want to run on CPU (not recommended!) use ```--gpuid -1```
+
 ### Tracking Progress
 
 As discussed previously, the convergence measure gives a very nice way of tracking progress!

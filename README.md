@@ -14,20 +14,20 @@ This is an implementation of the paper on Boundary Equilibrium Generative Advers
 
 ## What are Boundary Equilibrium Generative Adversarial Networks?
 
-Unlike standard generative adversarial networks [(Goodfellow et al. 2014)](#references), boundary equilibrium generative adversarial networks (BEGAN) use an auto-encoder as a disciminator. An auto-encoder loss is proposed, and an approximation of the Wasserstein distance is then computed between the auto-encoder loss distributions of real and generated samples.
+Unlike standard generative adversarial networks [(Goodfellow et al. 2014)](#references), boundary equilibrium generative adversarial networks (BEGAN) use an auto-encoder as a disciminator. An auto-encoder loss is proposed, and an approximation of the Wasserstein distance is then computed between the pixelwise auto-encoder loss distributions of real and generated samples.
 
 <p align='center'>
 <img src='../master/readme/eq_autoencoder_loss.png' width=580>  
 </p>
 
-Effectively, this Wasserstein approximation simplifies to a loss function wherein the discriminating auto-encoder aims to perform *well on real samples* and *poorly on generated samples*, while the generator aims to produce adversarial samples which the discriminator can't help but perform well upon.
+With the auto-encoder loss defined (above), the Wasserstein distance approximation simplifies to a loss function wherein the discriminating auto-encoder aims to perform *well on real samples* and *poorly on generated samples*, while the generator aims to produce adversarial samples which the discriminator can't help but perform well upon.
 
 <p align='center'>
 <img src='../master/readme/eq_losses.png' width=380>
 </p>
 
 
-Additionally, a hyperparamater gamma is introduced which gives the used the power to control sample diversity by balancing the discriminator and generator. This is put into effect through the use of a weighting parameter k_t which updates itself every training step in order to keep the discriminator and generator performance in the ratio we desire.
+Additionally, a hyperparamater gamma is introduced which gives the used the power to control sample diversity by balancing the discriminator and generator.
 
 <p align='center'>
 <img src='../master/readme/eq_gamma.png' width=170>  
@@ -51,7 +51,7 @@ The final contribution of the paper is a derived convergence measure M which giv
 <img src='../master/readme/eq_conv_measure.png'>
 </p>
 
-The overall result is a surprisingly effective model which produces samples well beyond the previous state of the art. We (the author of this code) are looking forwarding to  seeing how BEGAN performs outside of faces!
+The overall result is a surprisingly effective model which produces samples well beyond the previous state of the art. We (the author of this code) are looking forwarding to seeing how BEGAN performs outside of face images!
 <p align='center'>
 <img src='../master/readme/generated_from_Z.png' width=550>
 </p>

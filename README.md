@@ -23,20 +23,20 @@ Unlike standard generative adversarial networks [(Goodfellow et al. 2014)](#refe
 Effectively, this Wasserstein approximation simplifies to a loss function wherein the discriminating auto-encoder aims to perform *well on real samples* and *poorly on generated samples*, while the generator aims to produce adversarial samples which the discriminator can't help but perform well upon.
 
 <p align='center'>
-<img src='../master/readme/eq_losses.png' width=480>
+<img src='../master/readme/eq_losses.png' width=380>
 </p>
 
 
 Additionally, a hyperparamater gamma is introduced which gives the used the power to control sample diversity by balancing the discriminator and generator. This is put into effect through the use of a weighting parameter k_t which updates itself every training step in order to keep the discriminator and generator performance in the ratio we desire.
 
 <p align='center'>
-<img src='../master/readme/eq_gamma.png'>  
+<img src='../master/readme/eq_gamma.png' width=170>  
 </p>
 
 Gamma is put into effect through the use of a weighting parameter *k* which gets updated while training to adapt the loss function so that our output matches the desired diversity. The overall objective for the network is then:
 
 <p align='center'>
-<img src='../master/readme/eq_objective.png'> 
+<img src='../master/readme/eq_objective.png' width=510> 
 </p>
 
 Unlike most generative adversarial network architectures, where we need to update *G* and *D* independently, the Boundary Equilibrium GAN has the nice property that we can define a global loss and train the network as a whole (though we still have to make sure to update parameters with respect to the relative loss functions!)

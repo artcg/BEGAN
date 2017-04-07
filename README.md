@@ -2,7 +2,7 @@
 
 This is an implementation of the paper on Boundary Equilibrium Generative Adversarial Networks [(Berthelot, Schumm and Metz, 2017)](#references).
 
-## Prerequisites
+## Dependencies
 
 * Python 3+
 * numpy
@@ -126,7 +126,7 @@ I have 12GB which works for around 60,000 images.
 
 You can specify GPU id with the ```--gpuid``` argument. If you want to run on CPU (not recommended!) use ```--gpuid -1```
 
-Feel free to tune the other parameters if you wish (run ```python main.py --help``` for the full list).
+Other parameters can be tuned if you wish (run ```python main.py --help``` for the full list).
 The default values are the same as in the paper (though the authors point out that their choices aren't necessarily optimal).
 
 The main difference between this implementation's defaults and the original paper is the use of batch normalisation, we found that not using batch normalisation made training much slower.

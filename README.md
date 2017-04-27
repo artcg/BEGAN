@@ -119,7 +119,7 @@ python main.py --start-epoch=0, add-epochs=100 --save-every 5
 If you have limited RAM you might need to limit the number of images loaded into memory at once, e.g.
 
 ```bash
-python main.py --start-epoch=0, add-epochs=100 --save-every 5 --max-images 20000
+python main.py --start-epoch=0 add-epochs=100 --save-every 5 --max-images 20000
 ```
 
 I have 12GB which works for around 60,000 images.
@@ -135,7 +135,7 @@ The main difference between this implementation's defaults and the original pape
 
 After you've trained a model and you want to generate some samples simply run
 ```bash
-python main.py --start-epoch=N, add-epochs=0, --train=False
+python main.py --start-epoch=N add-epochs=0 --train=False
 ```
 where N is the checkpoint you want to run from.
 Samples will be saved to ./outputs/ by default (or add optional argument ```--outdir``` for alternative).

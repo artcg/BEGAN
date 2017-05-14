@@ -150,14 +150,14 @@ def began_train(images, start_epoch=0, add_epochs=None, batch_size=16,
             learning_rate_ = start_learn_rate * pow(0.5, epoch // decay_every)
             next_batch_ = next(iter_)
 
-            _, _, D_loss_, G_loss_, k_t_ = \
-                sess.run([G_train, D_train, D_loss, G_loss, k_tp],
+            _, _, D_loss_, G_loss_, k_t_, M_ = \
+                sess.run([G_train, D_train, D_loss, G_loss, k_tp, convergence_measure],
                          {learning_rate: learning_rate_,
                           next_batch: next_batch_, k_t: min(max(k_t_, 0), 1)})
 
             loss_tracker['generator'].append(G_loss_)
             loss_tracker['discriminator'].append(D_loss_)
-            loss_tracker['convergence_measure'].append(0)
+            loss_tracker['convergence_measure'].append(M_)
 
         if epoch % save_every == 0:
             path = '{}/{}_{}.tfmod'.format(checkpoint_path,

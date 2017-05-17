@@ -64,6 +64,8 @@ The overall result is a surprisingly effective model which produces samples well
 
 You might want to use the 'CelebA' dataset [(Liu et al. 2015)](#references), this can be downloaded from [the project website](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html). Make sure to download the 'Aligned and Cropped' Version. However you can modify these instructions to use an alternate dataset.
 
+(Note: if the CelebA Dropbox is down you can alternatively use their [Google Drive](https://drive.google.com/open?id=0B7EVK8r0v71pWEZsZE9oNnFzTm8)).
+
 This then needs to be prepared into hdf5 through the following method:
 
 ```python

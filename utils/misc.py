@@ -5,26 +5,13 @@ from glob import glob
 from config import data_path
 
 
-def loadData(size, offset=0):
-    '''
-    From great jupyter notebook by Tim Sainburg:
-    http://github.com/timsainb/Tensorflow-MultiGPU-VAE-GAN
-    '''
+def loadData(size):
     import h5py
     with h5py.File(data_path, 'r') as hf:
         faces = hf['images']
         full_size = len(faces)
-        if size is None:
-            size = full_size
-        n_chunks = int(np.ceil(full_size / size))
-        if offset >= n_chunks:
-            print("Looping back to start.")
-            offset = offset % n_chunks
-        if offset == n_chunks - 1:
-            print("Not enough data available, clipping to end.")
-            faces = faces[offset * size:]
-        else:
-            faces = faces[offset * size:(offset + 1) * size]
+        choice = np.random.choice(full_size, size, replace=False)
+        faces = faces[sorted(choice)]
         faces = np.array(faces, dtype=np.float16)
         return faces / 255
 

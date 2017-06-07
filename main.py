@@ -67,7 +67,7 @@ class BEGAN:
         convergence_measure = mu_real + np.abs(gamma * mu_real - mu_gen)
         return D_loss, G_loss, k_tp, convergence_measure
 
-    def run(x, batch_size, hidden_size):
+    def run(x, batch_size, num_filters, hidden_size, image_size):
         Z = tf.random_normal((batch_size, hidden_size), 0, 1)
 
         x_tilde = generator(Z, batch_size=batch_size, num_filters=num_filters,
@@ -84,7 +84,7 @@ class BEGAN:
 
 
 def began_train(images, start_epoch=0, add_epochs=None, batch_size=16,
-                hidden_size=2048, image_size=64, gpu_id='/gpu:0',
+                hidden_size=64, image_size=64, gpu_id='/gpu:0',
                 demo=False, get=False, start_learn_rate=1e-5, decay_every=50,
                 save_every=1, batch_norm=True, gamma=0.75):
 
@@ -104,8 +104,8 @@ def began_train(images, start_epoch=0, add_epochs=None, batch_size=16,
             next_batch = tf.placeholder(tf.float32,
                                         [batch_size, image_size * image_size * 3])
 
-            x_tilde, x_tilde_d, x_d = BEGAN.run(next_batch, batch_size,
-                                                hidden_size)
+            x_tilde, x_tilde_d, x_d = BEGAN.run(next_batch, batch_size=batch_size, num_filters=128,
+                                                hidden_size=hidden_size, image_size=image_size):
 
             k_t = tf.placeholder(tf.float32, shape=[])
             D_loss, G_loss, k_tp, convergence_measure = \

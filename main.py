@@ -1,3 +1,4 @@
+# github
 import tensorflow as tf
 from generator import began_generator as generator
 from discriminator import began_discriminator as discriminator
@@ -83,9 +84,9 @@ class BEGAN:
     scopes = ['generator', 'discriminator']
 
 
-def began_train(images, start_epoch=0, add_epochs=None, batch_size=16,
+def began_train(num_images=50000, start_epoch=0, add_epochs=None, batch_size=16,
                 hidden_size=64, image_size=64, gpu_id='/gpu:0',
-                demo=False, get=False, start_learn_rate=1e-5, decay_every=50,
+                demo=False, get=False, start_learn_rate=1e-4, decay_every=100,
                 save_every=1, batch_norm=True, gamma=0.75):
 
     num_epochs = start_epoch + add_epochs
@@ -138,8 +139,9 @@ def began_train(images, start_epoch=0, add_epochs=None, batch_size=16,
         tf.train.Saver.restore(saver, sess, path)
 
     k_t_ = 0  # We initialise with k_t = 0 as in the paper.
-    num_batches_per_epoch = int(len(images) / batch_size)
+    num_batches_per_epoch = num_images / batch_size
     for epoch in range(start_epoch, num_epochs):
+        images = loadData(size=num_images)
         print('Epoch {} / {}'.format(epoch + 1, num_epochs + 1))
         for i in tqdm.tqdm(range(num_batches_per_epoch)):
             iter_ = dataIterator([images], batch_size)
@@ -171,27 +173,6 @@ def began_train(images, start_epoch=0, add_epochs=None, batch_size=16,
             return ims
 
 
-def _train(start_epoch, train, add_epochs, max_images=50000, **k):
-    SE = start_epoch
-    while start_epoch <= SE + add_epochs:
-        i = 0
-        while True:
-            images = loadData(size=max_images, offset=i)
-            if train is False:
-                return began_train(images, start_epoch=start_epoch,
-                                   add_epochs=0, demo=True, get=True, **k)
-            began_train(images, start_epoch=start_epoch, add_epochs=1,
-                        **k)
-            start_epoch += 1
-            i += 1
-            if len(images) < max_images:
-                break
-            del images
-            time.sleep(30)  # Let my GPU cool down
-        print('full cycle finished. Good time to stop.')
-        time.sleep(60)
-
-
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Run BEGAN.')
@@ -210,7 +191,7 @@ if __name__ == '__main__':
                         help='Number of epochs to train'
                         + '(-1 to train indefinitely)')
 
-    parser.add_argument('--max-images', type=int, default=50000,
+    parser.add_argument('--num-images', type=int, default=50000,
                         help='Number of images to load into RAM at once')
 
     parser.add_argument('--gamma', type=float, default=0.75,
@@ -253,18 +234,24 @@ if __name__ == '__main__':
     if args.decay_every == -1:
         args.decay_every = np.inf
 
-    if not args.train:
-        args.train = False
+    if args.train:
+        demo = False
+        get = False
+    else:
+        demo = True
+        get = True
+        args.add_epochs = 0
 
-    im = _train(start_epoch=args.start_epoch, add_epochs=args.add_epochs,
+    im = began_train(start_epoch=args.start_epoch, add_epochs=args.add_epochs,
                 batch_size=args.batch_size, hidden_size=args.hidden_size,
-                gpu_id=args.gpuid, train=args.train,
+                gpu_id=args.gpuid, demo=demo, get=get,
                 save_every=args.save_every, decay_every=args.decay_every,
-                batch_norm=args.batch_norm)
+                batch_norm=args.batch_norm, num_images=args.num_images,
+                latent_size=args.latent_size)
 
     if not args.train:
         import matplotlib.pyplot as plt
         for n in range(8):
-            im_to_save = im[n].reshape([64, 64, 3])
+            im_to_save = im[n].reshape([args.image_size, args.image_size, 3])
             plt.imsave(args.outdir+'/out_{}.jpg'.format(n),
                        im_to_save)

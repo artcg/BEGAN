@@ -1,4 +1,3 @@
-# github
 import tensorflow as tf
 from generator import began_generator as generator
 from discriminator import began_discriminator as discriminator
@@ -139,7 +138,7 @@ def began_train(num_images=50000, start_epoch=0, add_epochs=None, batch_size=16,
         tf.train.Saver.restore(saver, sess, path)
 
     k_t_ = 0  # We initialise with k_t = 0 as in the paper.
-    num_batches_per_epoch = num_images / batch_size
+    num_batches_per_epoch = num_images // batch_size
     for epoch in range(start_epoch, num_epochs):
         images = loadData(size=num_images)
         print('Epoch {} / {}'.format(epoch + 1, num_epochs + 1))

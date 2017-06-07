@@ -7,7 +7,6 @@ This is an implementation of the paper on Boundary Equilibrium Generative Advers
 * Python 3+
 * numpy
 * Tensorflow
-* Prettytensor
 * tqdm 
 * h5py
 * scipy (optional)

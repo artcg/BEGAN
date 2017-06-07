@@ -1,5 +1,4 @@
 import tensorflow as tf
-import prettytensor as pt
 from generator import began_generator as generator
 from discriminator import began_discriminator as discriminator
 from utils.misc import loadData, dataIterator
@@ -71,23 +70,21 @@ class BEGAN:
     def run(x, batch_size, hidden_size):
         Z = tf.random_normal((batch_size, hidden_size), 0, 1)
 
-        with pt.defaults_scope(learned_moments_update_rate=0.0003,
-                               variance_epsilon=0.001):
+        x_tilde = generator(Z, batch_size=batch_size, num_filters=num_filters,
+                            hidden_size=hidden_size, image_size=image_size)
+        x_tilde_d = discriminator(x_tilde, batch_size=batch_size, num_filters=num_filters,
+                                  hidden_size=hidden_size, image_size=image_size)
 
-            x_tilde = generator(Z, batch_size=batch_size)
-            x_tilde_d = discriminator(x_tilde, batch_size=batch_size,
-                                      hidden_size=hidden_size)
+        x_d = discriminator(x, reuse_scope=True, batch_size=batch_size, num_filters=num_filters,
+                            hidden_size=hidden_size, image_size=image_size)
 
-            x_d = discriminator(x, reuse_scope=True, batch_size=batch_size,
-                                hidden_size=hidden_size)
-
-            return x_tilde, x_tilde_d, x_d
+        return x_tilde, x_tilde_d, x_d
 
     scopes = ['generator', 'discriminator']
 
 
 def began_train(images, start_epoch=0, add_epochs=None, batch_size=16,
-                hidden_size=2048, dim=(64, 64, 3), gpu_id='/gpu:0',
+                hidden_size=2048, image_size=64, gpu_id='/gpu:0',
                 demo=False, get=False, start_learn_rate=1e-5, decay_every=50,
                 save_every=1, batch_norm=True, gamma=0.75):
 
@@ -105,7 +102,7 @@ def began_train(images, start_epoch=0, add_epochs=None, batch_size=16,
             opt = tf.train.AdamOptimizer(learning_rate, epsilon=1.0)
 
             next_batch = tf.placeholder(tf.float32,
-                                        [batch_size, np.product(dim)])
+                                        [batch_size, image_size * image_size * 3])
 
             x_tilde, x_tilde_d, x_d = BEGAN.run(next_batch, batch_size,
                                                 hidden_size)
@@ -230,7 +227,7 @@ if __name__ == '__main__':
                         help='Batch size for training (default 16'
                         + 'as in paper)')
 
-    parser.add_argument('--hidden_size', type=int, default=2048,
+    parser.add_argument('--hidden_size', type=int, default=64,
                         help='Dimensionality of the discriminator encoding.'
                         + '(Paper doesnt specify value so we use guess)')
 
@@ -243,6 +240,9 @@ if __name__ == '__main__':
 
     parser.add_argument('--outdir', type=str, default='output',
                         help='Path to save output generations')
+
+    parser.add_argument('--image-size', type=int, default=64,
+                        help='Image size (must be 64 or 128)')
 
     args = parser.parse_args()
     if args.gpuid == -1:

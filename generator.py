@@ -1,99 +1,84 @@
 import tensorflow as tf
-import prettytensor as pt
 from utils import custom_ops
 
 if False:  # This to silence pyflake
     custom_ops
 
 
-def began_generator(Z, batch_size, scope_name="generator",
-                    reuse_scope=False):
+def decoder(Z, batch_size, num_filters, hidden_size, image_size):
     '''
     The Boundary Equilibrium GAN deliberately uses a simple generator
-    architecture. This is because the authors are proving that the
-    excellent results are due to the innovative model design rather
-    than tricks such as batch normalisation.
+    architecture.
 
-    This implementation uses batch normalisation by default since it
-    seems to improve training
-
-    Effectively, the generator consists of 3x3 convolutions (with ELU
-    applied after each layer), combined with nearest neighbour upsampling
-    to reach the desired resolution.
+    Upsampling is 3x3 convolutions, with nearest neighbour resizing
+    to the desired resolution.
 
     Args:
         Z: Latent space
         batch_size: Batch size of generations
+        num_filters: Number of filters in convolutional layers
+        hidden_size: Dimensionality of encoding
+        image_size: First dimension of generated image (must be 64 or 128)
         scope_name: Tensorflow scope name
         reuse_scope: Tensorflow scope handling
     Returns:
         Flattened tensor of generated images, with dimensionality:
-            batch_size * 64 * 64 * 3
+            [batch_size, image_size * image_size * 3]
     '''
+    layer_1 = custom_fc(Z, 8 * 8 * num_filters)
 
-    n = 128  # 'n' is number of filter dimensions
+    layer_1 = tf.reshape(layer_1, [-1, 8, 8, num_filters])  # '-1' is batch size
 
+    conv_1 = custom_conv2d(layer_1, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+    conv_1 = tf.nn.elu(conv_1)
+
+    conv_2 = custom_conv2d(conv_1, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+    conv_2 = tf.nn.elu(conv_2)
+
+    layer_2 = tf.image.resize_nearest_neighbor(conv_2, [16, 16])
+
+    conv_3 = custom_conv2d(layer_2, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+    conv_3 = tf.nn.elu(conv_3)
+
+    conv_4 = custom_conv2d(conv_3, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+    conv_4 = tf.nn.elu(conv_4)
+
+    layer_3 = tf.image.resize_nearest_neighbor(conv_4, [32, 32])
+
+    conv_5 = custom_conv2d(layer_3, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+    conv_5 = tf.nn.elu(conv_5)
+
+    conv_6 = custom_conv2d(conv_5, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+    conv_6 = tf.nn.elu(conv_6)
+
+    layer_4 = tf.image.resize_nearest_neighbor(conv_6, [64, 64])
+
+    conv_7 = custom_conv2d(layer_4, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+    conv_7 = tf.nn.elu(conv_7)
+
+    conv_8 = custom_conv2d(conv_7, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+    conv_8 = tf.nn.elu(conv_8)
+
+    if image_size == 64:
+        im = conv_8
+    else:
+        layer_5 = tf.image.resize_nearest_neighbor(conv_8, [128, 128])
+
+        conv_9 = custom_conv2d(layer_5, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+        conv_9 = tf.nn.elu(conv_9)
+
+        conv_10 = custom_conv2d(conv_9, num_filters, k_h=3, k_w=3, d_h=1, d_w=1)
+        im = tf.nn.elu(conv_10)
+
+    im = custom_conv2d(im, 3, k_h=3, k_w=3, d_h=1, d_w=1)
+    im = tf.sigmoid(im)
+
+    return im
+
+def began_generator(Z, batch_size, num_filters, hidden_size, image_size,
+                    scope_name="generator", reuse_scope=False):
     with tf.variable_scope(scope_name) as scope:
         if reuse_scope:
             scope.reuse_variables()
+        return decoder(Z, batch_size, num_filters, hidden_size, image_size)
 
-        layer_1 = (pt.wrap(Z)  # (hidden_size)
-                   .flatten()
-                   .fully_connected(8 * 8 * n, activation_fn=tf.nn.elu)
-                   .fc_batch_norm()
-                   .reshape([-1, 8, 8, n]))  # '-1' is batch size
-
-        conv_1 = (layer_1
-                  .custom_conv2d(n, k_h=3, k_w=3, d_h=1, d_w=1)
-                  .conv_batch_norm()
-                  .apply(tf.nn.elu))
-
-        conv_2 = (conv_1
-                  .custom_conv2d(n, k_h=3, k_w=3, d_h=1, d_w=1)
-                  .conv_batch_norm()
-                  .apply(tf.nn.elu))
-
-        layer_2 = (conv_2
-                   .apply(tf.image.resize_nearest_neighbor, [16, 16]))
-
-        conv_3 = (layer_2
-                  .custom_conv2d(n, k_h=3, k_w=3, d_h=1, d_w=1)
-                  .conv_batch_norm()
-                  .apply(tf.nn.elu))
-
-        conv_4 = (conv_3
-                  .custom_conv2d(n, k_h=3, k_w=3, d_h=1, d_w=1)
-                  .conv_batch_norm()
-                  .apply(tf.nn.elu))
-
-        layer_3 = (conv_4
-                   .apply(tf.image.resize_nearest_neighbor, [32, 32]))
-
-        conv_5 = (layer_3
-                  .custom_conv2d(n, k_h=3, k_w=3, d_h=1, d_w=1)
-                  .conv_batch_norm()
-                  .apply(tf.nn.elu))
-
-        conv_6 = (conv_5
-                  .custom_conv2d(n, k_h=3, k_w=3, d_h=1, d_w=1)
-                  .conv_batch_norm()
-                  .apply(tf.nn.elu))
-
-        layer_4 = (conv_6
-                   .apply(tf.image.resize_nearest_neighbor, [64, 64]))
-
-        conv_7 = (layer_4
-                  .custom_conv2d(n, k_h=3, k_w=3, d_h=1, d_w=1)
-                  .conv_batch_norm()
-                  .apply(tf.nn.elu))
-
-        conv_8 = (conv_7
-                  .custom_conv2d(n, k_h=3, k_w=3, d_h=1, d_w=1)
-                  .conv_batch_norm()
-                  .apply(tf.nn.elu))
-
-        conv_9 = (conv_8
-                  .custom_conv2d(3, k_h=3, k_w=3, d_h=1, d_w=1)
-                  .apply(tf.sigmoid))
-
-        return conv_9.flatten()

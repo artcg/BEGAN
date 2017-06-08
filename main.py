@@ -54,9 +54,9 @@ class BEGAN:
             eta = 1  # paper uses L1 norm
             diff = tf.abs(out - inp)
             if eta == 1:
-                return tf.reduce_sum(diff)
+                return tf.reduce_mean(diff)
             else:
-                return tf.reduce_sum(tf.pow(diff, eta))
+                return tf.reduce_mean(tf.pow(diff, eta))
 
         mu_real = pixel_autoencoder_loss(D_real_out, D_real_in)
         mu_gen = pixel_autoencoder_loss(D_gen_out, D_gen_in)
@@ -107,7 +107,9 @@ def began_train(num_images=50000, start_epoch=0, add_epochs=None, batch_size=16,
             x_tilde, x_tilde_d, x_d = BEGAN.run(next_batch, batch_size=batch_size, num_filters=128,
                                                 hidden_size=hidden_size, image_size=image_size):
 
-            k_t = tf.placeholder(tf.float32, shape=[])
+            k_t = tf.get_variable('kt', [],
+                                  initializer=tf.constant_initializer(0),
+                                  trainable=False)
             D_loss, G_loss, k_tp, convergence_measure = \
                 BEGAN.loss(next_batch, x_d, x_tilde, x_tilde_d, k_t=k_t)
 
@@ -137,7 +139,7 @@ def began_train(num_images=50000, start_epoch=0, add_epochs=None, batch_size=16,
                                        str(start_epoch-1).zfill(4))
         tf.train.Saver.restore(saver, sess, path)
 
-    k_t_ = 0  # We initialise with k_t = 0 as in the paper.
+    k_t_ = sess.run(k_t)  # We initialise with k_t = 0 as in the paper.
     num_batches_per_epoch = num_images // batch_size
     for epoch in range(start_epoch, num_epochs):
         images = loadData(size=num_images)

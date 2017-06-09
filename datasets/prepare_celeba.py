@@ -14,7 +14,7 @@ data = np.zeros((len(filenames), w * h * 3), dtype=np.uint8)
 # (or removed entirely) for other datasets.
 
 
-def get_image(image_path, w=64, h=64):
+def get_image(image_path):
     im = imread(image_path).astype(np.float)
     orig_h, orig_w = im.shape[:2]
     new_h = int(orig_h * w / orig_w)
@@ -26,5 +26,5 @@ for n, fname in tqdm(enumerate(filenames)):
     image = get_image(fname, w, h)
     data[n] = image.flatten()
 
-with h5py.File(''.join(['datasets/celeba.h5']), 'w') as f:
+with h5py.File('datasets/celeba.h5', 'w') as f:
     f.create_dataset("images", data=data)

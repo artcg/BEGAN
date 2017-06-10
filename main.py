@@ -248,7 +248,8 @@ if __name__ == '__main__':
                 gpu_id=args.gpuid, demo=demo, get=get,
                 save_every=args.save_every, decay_every=args.decay_every,
                 batch_norm=args.batch_norm, num_images=args.num_images,
-                latent_size=args.latent_size)
+                latent_size=args.latent_size,
+                start_learn_rate=args.start_learn_rate)
 
     if not args.train:
         import matplotlib.pyplot as plt

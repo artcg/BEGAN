@@ -5,7 +5,6 @@ from utils.misc import loadData, dataIterator
 import tqdm
 import numpy as np
 from utils.misc import plot_gens
-import time
 from config import checkpoint_path, checkpoint_prefix
 
 
@@ -105,7 +104,7 @@ def began_train(num_images=50000, start_epoch=0, add_epochs=None, batch_size=16,
                                         [batch_size, image_size * image_size * 3])
 
             x_tilde, x_tilde_d, x_d = BEGAN.run(next_batch, batch_size=batch_size, num_filters=128,
-                                                hidden_size=hidden_size, image_size=image_size):
+                                                hidden_size=hidden_size, image_size=image_size)
 
             k_t = tf.get_variable('kt', [],
                                   initializer=tf.constant_initializer(0),
@@ -192,7 +191,7 @@ if __name__ == '__main__':
                         help='Number of epochs to train'
                         + '(-1 to train indefinitely)')
 
-    parser.add_argument('--num-images', type=int, default=50000,
+    parser.add_argument('--num-images', type=int, default=2000,
                         help='Number of images to load into RAM at once')
 
     parser.add_argument('--gamma', type=float, default=0.75,
@@ -246,9 +245,9 @@ if __name__ == '__main__':
     im = began_train(start_epoch=args.start_epoch, add_epochs=args.add_epochs,
                 batch_size=args.batch_size, hidden_size=args.hidden_size,
                 gpu_id=args.gpuid, demo=demo, get=get,
+                image_size=args.image_size,
                 save_every=args.save_every, decay_every=args.decay_every,
                 batch_norm=args.batch_norm, num_images=args.num_images,
-                latent_size=args.latent_size,
                 start_learn_rate=args.start_learn_rate)
 
     if not args.train:

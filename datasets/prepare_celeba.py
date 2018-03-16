@@ -14,7 +14,7 @@ data = np.zeros((len(filenames), w * h * 3), dtype=np.uint8)
 # (or removed entirely) for other datasets.
 
 
-def get_image(image_path):
+def get_image(image_path, w=64, h=64):
     im = imread(image_path).astype(np.float)
     orig_h, orig_w = im.shape[:2]
     new_h = int(orig_h * w / orig_w)

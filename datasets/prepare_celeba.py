@@ -23,7 +23,7 @@ def get_image(image_path, w=64, h=64):
     return im[margin:margin+h]
 
 for n, fname in tqdm(enumerate(filenames)):
-    image = get_image(fname, w, h)
+    image = get_image(fname)
     data[n] = image.flatten()
 
 with h5py.File('datasets/celeba.h5', 'w') as f:

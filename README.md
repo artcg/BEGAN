@@ -11,6 +11,10 @@ This is an implementation of the paper on Boundary Equilibrium Generative Advers
 * h5py
 * scipy (optional)
 
+```
+pip install -r requirements.txt
+````
+
 ## What are Boundary Equilibrium Generative Adversarial Networks?
 
 Unlike standard generative adversarial networks [(Goodfellow et al. 2014)](#references), boundary equilibrium generative adversarial networks (BEGAN) use an auto-encoder as a disciminator. An auto-encoder loss is defined, and an approximation of the Wasserstein distance is then computed between the pixelwise auto-encoder loss distributions of real and generated samples.
@@ -65,62 +69,24 @@ You might want to use the 'CelebA' dataset [(Liu et al. 2015)](#references), thi
 
 (Note: if the CelebA Dropbox is down you can alternatively use their [Google Drive](https://drive.google.com/open?id=0B7EVK8r0v71pWEZsZE9oNnFzTm8)).
 
-This then needs to be prepared into hdf5 through the following method:
+Extract the downloaded file in the `img_align_celeba` folder, and run:
 
 ```python
-from glob import glob 
-import os
-import numpy as np
-import h5py
-from tqdm import tqdm
-from scipy.misc import imread, imresize
-
-filenames = glob(os.path.join("img_align_celeba", "*.jpg"))
-filenames = np.sort(filenames)
-w, h = 64, 64  # Change this if you wish to use larger images
-data = np.zeros((len(filenames), w * h * 3), dtype = np.uint8)
-
-# This preprocessing is appriate for CelebA but should be adapted
-# (or removed entirely) for other datasets.
-
-def get_image(image_path, w=64, h=64):
-    im = imread(image_path).astype(np.float)
-    orig_h, orig_w = im.shape[:2]
-    new_h = int(orig_h * w / orig_w)
-    im = imresize(im, (new_h, w))
-    margin = int(round((new_h - h)/2))
-    return im[margin:margin+h]
-
-for n, fname in tqdm(enumerate(filenames)):
-    image = get_image(fname, w, h)
-    data[n] = image.flatten()
-
-with h5py.File(''.join(['datasets/celeba.h5']), 'w') as f:
-    f.create_dataset("images", data=data)
+python datasets/prepare_celeba.py
 ```
-
 
 ### Training
 
-After your dataset has been created through the method above, change the file config.py to point to your dataset, and to point to your desired checkpoint directory.
-
-E.g., if your dataset is stored at ```/home/user/data/dataset.hdf5```, then alter config.py to read:
-
-```python
-dataset_path = '/home/user/data/dataset.hdf5'
-checkpoint_path = './checkpoints'
-```
-
-You can then begin training:
+After your dataset has been created through the method above, you can start training:
 
 ```bash
-python main.py --start-epoch=0, add-epochs=100 --save-every 5
+python main.py --start-epoch=0 --add-epochs=100 --save-every 5
 ```
 
 If you have limited RAM you might need to limit the number of images loaded into memory at once, e.g.
 
 ```bash
-python main.py --start-epoch=0 add-epochs=100 --save-every 5 --max-images 20000
+python main.py --start-epoch=0 --add-epochs=100 --save-every 5 --max-images 20000
 ```
 
 I have 12GB which works for around 60,000 images.
@@ -135,9 +101,11 @@ The main difference between this implementation's defaults and the original pape
 ### Running
 
 After you've trained a model and you want to generate some samples simply run
+
 ```bash
 python main.py --start-epoch=N add-epochs=0 --train=False
 ```
+
 where N is the checkpoint you want to run from.
 Samples will be saved to ./outputs/ by default (or add optional argument ```--outdir``` for alternative).
 
@@ -152,7 +120,7 @@ Berthelot, Schumm and Metz show that it is a true-to-reality metric to use:
 <img src='../master/readme/conv_measure_vis.png' width=550>
 </p>
 
-*Convergence measure over training epochs, with generator outputs showed above [(Berthelot, Schumm and Metz, 2017)](#references).*
+*Convergence measure over training epochs, with generator outputs shown above [(Berthelot, Schumm and Metz, 2017)](#references).*
 
 
 ## Issues / Contributing / Todo

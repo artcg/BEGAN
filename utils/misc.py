@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import scipy.misc
 from glob import glob
@@ -78,6 +77,8 @@ def plot_gens(images, rowlabels, losses):
     From great jupyter notebook by Tim Sainburg:
     http://github.com/timsainb/Tensorflow-MultiGPU-VAE-GAN
     '''
+    import matplotlib.pyplot as plt
+
     examples = 8
     fig, ax = plt.subplots(nrows=len(images), ncols=examples, figsize=(18, 8))
     for i in range(examples):

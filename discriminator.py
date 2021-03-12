@@ -2,9 +2,6 @@ import tensorflow as tf
 from utils.custom_ops import custom_fc, custom_conv2d
 from generator import decoder
 
-if False:  # This to silence pyflake
-    custom_ops
-
 
 def began_discriminator(D_I, batch_size, num_filters, hidden_size, image_size,
                         scope_name="discriminator", reuse_scope=False):

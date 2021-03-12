@@ -15,7 +15,7 @@ class BEGAN:
 
     def loss(D_real_in, D_real_out, D_gen_in, D_gen_out, k_t, gamma=0.75):
         '''
-        The Bounrdary Equibilibrium GAN uses an approximation of the
+        The Boundary Equibilibrium GAN uses an approximation of the
         Wasserstein Loss between the disitributions of pixel-wise
         autoencoder loss based on the discriminator performance on
         real vs. generated data.

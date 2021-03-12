@@ -9,8 +9,7 @@ def loadData(size):
     import h5py
     with h5py.File(data_path, 'r') as hf:
         faces = hf['images']
-        full_size = len(faces)
-        choice = np.random.choice(full_size, size, replace=False)
+        choice = np.random.choice(len(faces), size, replace=False)
         faces = faces[sorted(choice)]
         faces = np.array(faces, dtype=np.float16)
         return faces / 255
